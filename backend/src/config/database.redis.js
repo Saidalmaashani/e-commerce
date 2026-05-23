@@ -5,9 +5,7 @@ let redisClient = null;
 export const connectRedis = async () => {
   try {
     redisClient = createClient({
-      host: process.env.REDIS_HOST || 'localhost',
-      port: process.env.REDIS_PORT || 6379,
-      password: process.env.REDIS_PASSWORD || undefined,
+      url: process.env.REDIS_URL,
       retry_strategy: (options) => {
         if (options.error && options.error.code === 'ECONNREFUSED') {
           return new Error('Redis connection refused');
