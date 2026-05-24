@@ -5,7 +5,7 @@ interface AuthState {
   token: string | null;
   role: 'merchant' | 'shopper' | 'delivery' | 'admin' | null;
   isAuthenticated: boolean;
-  login: (user: any, token: string, role: string) => void;
+  login: (user: any, token: string, role: 'merchant' | 'shopper' | 'delivery' | 'admin') => void;
   logout: () => void;
   setUser: (user: any) => void;
 }
