@@ -145,5 +145,7 @@ async function startServer() {
 }
 
 startServer();
+import { createDefaultAdmin } from './controllers/authController.js';
+mongoose.connection.once('open', () => createDefaultAdmin());
 
 export default app;
