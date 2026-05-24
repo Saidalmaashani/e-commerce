@@ -1,6 +1,30 @@
-import ShopperHome from './pages/Home';
+import { useState } from 'react';
+import Link from 'next/link';
 
-export default ShopperHome;
+const products = [
+  { id: 1, name: 'Wireless Headphones Pro', price: 79.99, oldPrice: 129.99, rating: 4.5, reviews: 234, emoji: '🎧', badge: 'Sale' },
+  { id: 2, name: 'Smart Watch Series X', price: 299.99, oldPrice: null, rating: 4.8, reviews: 189, emoji: '⌚', badge: 'New' },
+  { id: 3, name: 'Premium USB-C Cable', price: 12.99, oldPrice: 19.99, rating: 4.3, reviews: 567, emoji: '🔌', badge: null },
+  { id: 4, name: 'Phone Case Ultra', price: 19.99, oldPrice: null, rating: 4.6, reviews: 123, emoji: '📱', badge: 'Hot' },
+  { id: 5, name: 'Bluetooth Speaker', price: 49.99, oldPrice: 79.99, rating: 4.7, reviews: 445, emoji: '🔊', badge: 'Sale' },
+  { id: 6, name: 'Laptop Stand Pro', price: 39.99, oldPrice: null, rating: 4.4, reviews: 98, emoji: '💻', badge: null },
+  { id: 7, name: 'Mechanical Keyboard', price: 89.99, oldPrice: 119.99, rating: 4.9, reviews: 312, emoji: '⌨️', badge: 'Top' },
+  { id: 8, name: 'Wireless Mouse', price: 29.99, oldPrice: null, rating: 4.5, reviews: 201, emoji: '🖱️', badge: null },
+];
+
+const categories = [
+  { id: 'all', name: 'All', icon: '🌟' },
+  { id: 'electronics', name: 'Electronics', icon: '⚡' },
+  { id: 'clothing', name: 'Clothing', icon: '👕' },
+  { id: 'home', name: 'Home', icon: '🏠' },
+  { id: 'sports', name: 'Sports', icon: '⚽' },
+  { id: 'books', name: 'Books', icon: '📚' },
+];
+
+export default function ShopperHome() {
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [cartCount, setCartCount] = useState(0);
+  const [search, setSearch] = useState('');
 
   const addToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -11,9 +35,7 @@ export default ShopperHome;
     <div className="min-h-screen bg-gray-950 text-white">
       <nav className="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/shopper" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-            ShopHub
-          </Link>
+          <Link href="/shopper" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">ShopHub</Link>
           <div className="flex-1 max-w-md mx-6">
             <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products..." className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" />
           </div>
@@ -27,7 +49,6 @@ export default ShopperHome;
           </div>
         </div>
       </nav>
-
       <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-cyan-900 py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <p className="text-blue-300 text-sm font-medium mb-2">Limited Time Offer</p>
@@ -39,7 +60,6 @@ export default ShopperHome;
           </div>
         </div>
       </div>
-
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex gap-3 mb-8 overflow-x-auto pb-2">
           {categories.map(cat => (
@@ -48,12 +68,10 @@ export default ShopperHome;
             </button>
           ))}
         </div>
-
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold">Featured Products</h2>
           <Link href="/shopper/all" className="text-blue-400 text-sm hover:text-blue-300">View All</Link>
         </div>
-
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {products.map(product => (
             <Link key={product.id} href={`/shopper/product/${product.id}`}>
