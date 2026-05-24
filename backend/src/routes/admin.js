@@ -1,35 +1,49 @@
 import express from 'express';
 import { verifyToken, verifyRole } from '../middleware/auth.js';
+import { Merchant } from '../models/Merchant.js';
+import { Product } from '../models/Product.js';
 
 const router = express.Router();
 
-// Admin routes
-router.get('/dashboard', verifyToken, verifyRole(['admin']), (req, res) => {
-  res.json({ message: 'Admin dashboard' });
+// GET all merchants
+router.get('/merchants', verifyToken, verifyRole(['admin']), async (req, res) => {
+  try {
+    const { status } = req.query;
+    const filter = status ? { status } : {};
+    const merchants = await Merchant.find(filter).sort({ createdAt: -1 });
+    res.json({ success: true, merchants });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.get('/users', verifyToken, verifyRole(['admin']), (req, res) => {
-  res.json({ message: 'Get all users' });
+// PUT approve/reject merchant
+router.put('/merchants/:id', verifyToken, verifyRole(['admin']), async (req, res) => {
+  try {
+    const { status, rejectionReason } = req.body;
+    const merchant = await Merchant.findByIdAndUpdate(
+      req.params.id,
+      { status, rejectionReason: rejectionReason || '', approvedAt: status === 'approved' ? new Date() : null },
+      { new: true }
+    );
+    if (!merchant) return res.status(404).json({ error: 'Merchant not found' });
+    res.json({ success: true, merchant });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.get('/merchants/pending', verifyToken, verifyRole(['admin']), (req, res) => {
-  res.json({ message: 'Get pending merchants' });
-});
-
-router.post('/merchants/:id/approve', verifyToken, verifyRole(['admin']), (req, res) => {
-  res.json({ message: 'Approve merchant' });
-});
-
-router.get('/orders', verifyToken, verifyRole(['admin']), (req, res) => {
-  res.json({ message: 'Get all orders' });
-});
-
-router.get('/analytics', verifyToken, verifyRole(['admin']), (req, res) => {
-  res.json({ message: 'Get analytics' });
-});
-
-router.get('/disputes', verifyToken, verifyRole(['admin']), (req, res) => {
-  res.json({ message: 'Get disputes' });
+// GET platform stats
+router.get('/stats', verifyToken, verifyRole(['admin']), async (req, res) => {
+  try {
+    const totalMerchants = await Merchant.countDocuments();
+    const pendingMerchants = await Merchant.countDocuments({ status: 'pending' });
+    const approvedMerchants = await Merchant.countDocuments({ status: 'approved' });
+    const totalProducts = await Product.countDocuments({ isActive: true });
+    res.json({ success: true, stats: { totalMerchants, pendingMerchants, approvedMerchants, totalProducts } });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 export default router;
