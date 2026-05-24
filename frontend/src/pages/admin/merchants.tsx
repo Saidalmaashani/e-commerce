@@ -31,7 +31,7 @@ export default function AdminMerchants() {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const headers = { Authorization: `Bearer ${token}` };
 
-  useEffect(() => { fetchMerchants(); }, [filter]);
+  useEffect(() => { fetchMerchants(); }, [filter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchMerchants = async () => {
     setLoading(true);

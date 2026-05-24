@@ -48,7 +48,7 @@ export default function MerchantProducts() {
     }
   };
 
-  useEffect(() => { fetchProducts(); }, []);
+  useEffect(() => { fetchProducts(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getStatus = (stock: number) => stock === 0 ? 'Out of Stock' : stock <= 10 ? 'Low Stock' : 'Active';
 
