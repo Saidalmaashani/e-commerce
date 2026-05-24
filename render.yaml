@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ecommerce-frontend
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd frontend && npm install --legacy-peer-deps && npm run build
+    startCommand: cd frontend && npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: http://localhost:3001
+    routes:
+      - path: /
+        destination: /

@@ -1,30 +1,6 @@
-import { useState } from 'react';
-import Link from 'next/link';
+import ShopperHome from './pages/Home';
 
-const products = [
-  { id: 1, name: 'Wireless Headphones Pro', price: 79.99, oldPrice: 129.99, rating: 4.5, reviews: 234, emoji: '🎧', badge: 'Sale' },
-  { id: 2, name: 'Smart Watch Series X', price: 299.99, oldPrice: null, rating: 4.8, reviews: 189, emoji: '⌚', badge: 'New' },
-  { id: 3, name: 'Premium USB-C Cable', price: 12.99, oldPrice: 19.99, rating: 4.3, reviews: 567, emoji: '🔌', badge: null },
-  { id: 4, name: 'Phone Case Ultra', price: 19.99, oldPrice: null, rating: 4.6, reviews: 123, emoji: '📱', badge: 'Hot' },
-  { id: 5, name: 'Bluetooth Speaker', price: 49.99, oldPrice: 79.99, rating: 4.7, reviews: 445, emoji: '🔊', badge: 'Sale' },
-  { id: 6, name: 'Laptop Stand Pro', price: 39.99, oldPrice: null, rating: 4.4, reviews: 98, emoji: '💻', badge: null },
-  { id: 7, name: 'Mechanical Keyboard', price: 89.99, oldPrice: 119.99, rating: 4.9, reviews: 312, emoji: '⌨️', badge: 'Top' },
-  { id: 8, name: 'Wireless Mouse', price: 29.99, oldPrice: null, rating: 4.5, reviews: 201, emoji: '🖱️', badge: null },
-];
-
-const categories = [
-  { id: 'all', name: 'All', icon: '🌟' },
-  { id: 'electronics', name: 'Electronics', icon: '⚡' },
-  { id: 'clothing', name: 'Clothing', icon: '👕' },
-  { id: 'home', name: 'Home', icon: '🏠' },
-  { id: 'sports', name: 'Sports', icon: '⚽' },
-  { id: 'books', name: 'Books', icon: '📚' },
-];
-
-export default function ShopperHome() {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [cartCount, setCartCount] = useState(0);
-  const [search, setSearch] = useState('');
+export default ShopperHome;
 
   const addToCart = (e: React.MouseEvent) => {
     e.preventDefault();
