@@ -15,12 +15,22 @@ const Sidebar = ({ active }: { active: string }) => (
   </div>
 );
 
+type ToggleItem = { icon: string; label: string; desc: string; val: boolean; toggle: () => void; };
+
 export default function AdminSettings() {
   const [commission, setCommission] = useState(10);
   const [maintenance, setMaintenance] = useState(false);
+  const [emailNotif, setEmailNotif] = useState(true);
+  const [smsAlerts, setSmsAlerts] = useState(false);
   const [saved, setSaved] = useState(false);
 
   const save = () => { setSaved(true); setTimeout(() => setSaved(false), 2000); };
+
+  const toggleItems: ToggleItem[] = [
+    { icon:'🔧', label:'Maintenance Mode', desc:'Disable access to all users', val:maintenance, toggle:() => setMaintenance(v => !v) },
+    { icon:'📧', label:'Email Notifications', desc:'Send automated emails', val:emailNotif, toggle:() => setEmailNotif(v => !v) },
+    { icon:'💬', label:'SMS Alerts', desc:'Send SMS for critical events', val:smsAlerts, toggle:() => setSmsAlerts(v => !v) },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-950 text-white flex">
@@ -46,25 +56,27 @@ export default function AdminSettings() {
               </div>
             </div>
           </div>
+
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
             <h2 className="text-lg font-bold mb-6">System Controls</h2>
             <div className="space-y-4">
-              {[['🔧','Maintenance Mode','Disable access to all users',maintenance,setMaintenance],['📧','Email Notifications','Send automated emails',true,()=>{}],['💬','SMS Alerts','Send SMS for critical events',false,()=>{}]].map(([icon,label,desc,val,setter])=>(
-                <div key={label as string} className="flex items-center justify-between p-4 bg-gray-800 rounded-xl border border-gray-700">
+              {toggleItems.map(item => (
+                <div key={item.label} className="flex items-center justify-between p-4 bg-gray-800 rounded-xl border border-gray-700">
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{icon}</span>
+                    <span className="text-2xl">{item.icon}</span>
                     <div>
-                      <p className="font-bold text-white">{label as string}</p>
-                      <p className="text-gray-400 text-sm">{desc as string}</p>
+                      <p className="font-bold text-white">{item.label}</p>
+                      <p className="text-gray-400 text-sm">{item.desc}</p>
                     </div>
                   </div>
-                  <button onClick={()=>(setter as any)(!val)} className={`w-12 h-6 rounded-full transition-all relative ${val?'bg-orange-500':'bg-gray-700'}`}>
-                    <span className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${val?'left-7':'left-1'}`}/>
+                  <button onClick={item.toggle} className={`w-12 h-6 rounded-full transition-all relative ${item.val?'bg-orange-500':'bg-gray-700'}`}>
+                    <span className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${item.val?'left-7':'left-1'}`}/>
                   </button>
                 </div>
               ))}
             </div>
           </div>
+
           <button onClick={save} className={`w-full py-3.5 rounded-2xl font-black text-lg transition-all ${saved?'bg-emerald-600':'bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500'}`}>
             {saved?'✓ Saved!':'Save Changes'}
           </button>
