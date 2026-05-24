@@ -1,118 +1,109 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
+
+const products = [
+  { id: 1, name: 'Wireless Headphones Pro', price: 79.99, oldPrice: 129.99, rating: 4.5, reviews: 234, emoji: '🎧', badge: 'Sale' },
+  { id: 2, name: 'Smart Watch Series X', price: 299.99, oldPrice: null, rating: 4.8, reviews: 189, emoji: '⌚', badge: 'New' },
+  { id: 3, name: 'Premium USB-C Cable', price: 12.99, oldPrice: 19.99, rating: 4.3, reviews: 567, emoji: '🔌', badge: null },
+  { id: 4, name: 'Phone Case Ultra', price: 19.99, oldPrice: null, rating: 4.6, reviews: 123, emoji: '📱', badge: 'Hot' },
+  { id: 5, name: 'Bluetooth Speaker', price: 49.99, oldPrice: 79.99, rating: 4.7, reviews: 445, emoji: '🔊', badge: 'Sale' },
+  { id: 6, name: 'Laptop Stand Pro', price: 39.99, oldPrice: null, rating: 4.4, reviews: 98, emoji: '💻', badge: null },
+  { id: 7, name: 'Mechanical Keyboard', price: 89.99, oldPrice: 119.99, rating: 4.9, reviews: 312, emoji: '⌨️', badge: 'Top' },
+  { id: 8, name: 'Wireless Mouse', price: 29.99, oldPrice: null, rating: 4.5, reviews: 201, emoji: '🖱️', badge: null },
+];
+
+const categories = [
+  { id: 'all', name: 'All', icon: '🌟' },
+  { id: 'electronics', name: 'Electronics', icon: '⚡' },
+  { id: 'clothing', name: 'Clothing', icon: '👕' },
+  { id: 'home', name: 'Home', icon: '🏠' },
+  { id: 'sports', name: 'Sports', icon: '⚽' },
+  { id: 'books', name: 'Books', icon: '📚' },
+];
 
 export default function ShopperHome() {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [cartCount, setCartCount] = useState(0);
+  const [search, setSearch] = useState('');
 
-  const categories = [
-    { id: 'all', name: 'All' },
-    { id: 'electronics', name: 'Electronics' },
-    { id: 'clothing', name: 'Clothing' },
-    { id: 'home', name: 'Home & Kitchen' },
-    { id: 'books', name: 'Books' },
-    { id: 'sports', name: 'Sports' },
-  ];
-
-  const products = [
-    { id: 1, name: 'Wireless Headphones', price: 79.99, rating: 4.5, image: '🎧' },
-    { id: 2, name: 'Smart Watch', price: 299.99, rating: 4.8, image: '⌚' },
-    { id: 3, name: 'USB-C Cable', price: 12.99, rating: 4.3, image: '🔌' },
-    { id: 4, name: 'Phone Case', price: 19.99, rating: 4.6, image: '📱' },
-  ];
+  const addToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setCartCount(c => c + 1);
+  };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-8">
-              <Link href="/" className="text-2xl font-bold text-indigo-600">
-                🛍️ ECommerce
-              </Link>
-              <div className="hidden md:flex gap-6">
-                <Link href="/shopper/home" className="text-gray-700 hover:text-indigo-600">Home</Link>
-                <Link href="/shopper/search" className="text-gray-700 hover:text-indigo-600">Browse</Link>
-                <Link href="/shopper/orders" className="text-gray-700 hover:text-indigo-600">Orders</Link>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link href="/shopper/cart" className="relative">
-                🛒 Cart <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-              </Link>
-              <Link href="/account" className="text-gray-700 hover:text-indigo-600">👤</Link>
-            </div>
+    <div className="min-h-screen bg-gray-950 text-white">
+      <nav className="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          <Link href="/shopper" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            ShopHub
+          </Link>
+          <div className="flex-1 max-w-md mx-6">
+            <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products..." className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/shopper/cart" className="relative p-2">
+              <span className="text-xl">🛒</span>
+              {cartCount > 0 && <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{cartCount}</span>}
+            </Link>
+            <Link href="/shopper/orders" className="text-gray-400 hover:text-white text-xl">📦</Link>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-sm font-bold">S</div>
           </div>
         </div>
       </nav>
 
-      {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-4">Shop Your Favorites</h1>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="flex-1 px-4 py-2 rounded-lg text-gray-900 max-w-md"
-            />
-            <button className="px-6 py-2 bg-indigo-500 hover:bg-indigo-700 rounded-lg font-medium">
-              🔍 Search
-            </button>
+      <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-cyan-900 py-12 px-4">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-blue-300 text-sm font-medium mb-2">Limited Time Offer</p>
+          <h1 className="text-4xl font-bold text-white mb-3">Flash Sale - <span className="text-cyan-400">Up to 50% Off</span></h1>
+          <p className="text-gray-300 mb-6">Shop the best deals before they expire</p>
+          <div className="flex gap-3">
+            <Link href="/shopper/flash-sale" className="px-6 py-3 bg-blue-500 hover:bg-blue-400 rounded-xl font-semibold transition">Shop Now</Link>
+            <Link href="/shopper/categories" className="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl font-semibold transition">Browse All</Link>
           </div>
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Category Filter */}
-        <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-6 py-2 rounded-full whitespace-nowrap font-medium transition ${
-                selectedCategory === cat.id
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {cat.name}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex gap-3 mb-8 overflow-x-auto pb-2">
+          {categories.map(cat => (
+            <button key={cat.id} onClick={() => setSelectedCategory(cat.id)} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap text-sm font-medium transition-all ${selectedCategory === cat.id ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'}`}>
+              {cat.icon} {cat.name}
             </button>
           ))}
         </div>
 
-        {/* Featured Banner */}
-        <div className="mb-12 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg p-8 text-white">
-          <h2 className="text-3xl font-bold mb-2">🔥 Flash Sale</h2>
-          <p className="mb-4">Up to 50% off on selected items - Ends in 2:34:12</p>
-          <Link href="/shopper/flash-sale" className="inline-block px-6 py-2 bg-white text-orange-600 rounded-lg font-semibold hover:bg-gray-100">
-            View Flash Sale →
-          </Link>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold">Featured Products</h2>
+          <Link href="/shopper/all" className="text-blue-400 text-sm hover:text-blue-300">View All</Link>
         </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {products.map(product => (
             <Link key={product.id} href={`/shopper/product/${product.id}`}>
-              <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition cursor-pointer">
-                <div className="h-48 bg-gray-100 flex items-center justify-center text-6xl">
-                  {product.image}
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all cursor-pointer group">
+                <div className="relative h-40 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                  <span className="text-6xl group-hover:scale-110 transition-transform">{product.emoji}</span>
+                  {product.badge && <span className={`absolute top-2 left-2 text-xs font-bold px-2 py-1 rounded-lg text-white ${product.badge === 'Sale' ? 'bg-red-500' : product.badge === 'New' ? 'bg-green-500' : product.badge === 'Hot' ? 'bg-orange-500' : 'bg-blue-500'}`}>{product.badge}</span>}
+                  <button onClick={addToCart} className="absolute top-2 right-2 w-8 h-8 bg-gray-700 hover:bg-blue-600 rounded-lg flex items-center justify-center text-sm transition">+</button>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">{product.name}</h3>
-                  <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-indigo-600">${product.price}</span>
-                    <span className="text-sm text-gray-600">⭐ {product.rating}</span>
+                  <h3 className="font-medium text-white text-sm mb-1 truncate">{product.name}</h3>
+                  <div className="flex items-center gap-1 mb-2">
+                    <span className="text-yellow-400 text-xs">★ {product.rating}</span>
+                    <span className="text-gray-500 text-xs">({product.reviews})</span>
                   </div>
-                  <button className="w-full mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">
-                    Add to Cart
-                  </button>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-blue-400 font-bold">${product.price}</span>
+                    {product.oldPrice && <span className="text-gray-500 text-xs line-through">${product.oldPrice}</span>}
+                  </div>
+                  <button onClick={addToCart} className="w-full py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-sm font-medium transition">Add to Cart</button>
                 </div>
               </div>
             </Link>
           ))}
         </div>
-      </main>
+      </div>
     </div>
   );
 }

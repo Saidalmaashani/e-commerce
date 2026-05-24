@@ -4,37 +4,82 @@ import { useRouter } from 'next/router';
 export default function Login() {
   const router = useRouter();
   const [role, setRole] = useState('shopper');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const roles = [
+    { value: 'shopper', label: '🛒 Shopper', color: 'from-blue-500 to-cyan-500' },
+    { value: 'merchant', label: '🏪 Merchant', color: 'from-purple-500 to-pink-500' },
+    { value: 'delivery', label: '🚗 Delivery', color: 'from-green-500 to-teal-500' },
+    { value: 'admin', label: '👑 Admin', color: 'from-orange-500 to-red-500' },
+  ];
 
   const handleLogin = () => {
-    if (role === 'shopper') router.push('/shopper');
-    else if (role === 'merchant') router.push('/merchant');
-    else if (role === 'delivery') router.push('/delivery');
-    else if (role === 'admin') router.push('/admin');
+    router.push(`/${role}`);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h1 className="text-3xl font-bold text-indigo-600 mb-2 text-center">ECommerce</h1>
-        <p className="text-gray-500 text-center mb-8">Sign in to your account</p>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Login as</label>
-          <select value={role} onChange={(e) => setRole(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <option value="shopper">Shopper</option>
-            <option value="merchant">Merchant</option>
-            <option value="delivery">Delivery Partner</option>
-            <option value="admin">Admin</option>
-          </select>
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2">🛍️ ShopHub</h1>
+          <p className="text-gray-400">Your ultimate shopping destination</p>
         </div>
-        <input type="email" placeholder="Email"
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-        <input type="password" placeholder="Password"
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-        <button onClick={handleLogin}
-          className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
-          Sign In
-        </button>
+
+        <div className="bg-gray-900 rounded-2xl p-8 border border-gray-800 shadow-2xl">
+          <h2 className="text-xl font-semibold text-white mb-6">Sign In</h2>
+
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            {roles.map((r) => (
+              <button
+                key={r.value}
+                onClick={() => setRole(r.value)}
+                className={`p-3 rounded-xl text-sm font-medium transition-all ${
+                  role === r.value
+                    ? `bg-gradient-to-r ${r.color} text-white shadow-lg scale-105`
+                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                }`}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="space-y-4 mb-6">
+            <div>
+              <label className="text-sm text-gray-400 mb-1 block">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition"
+              />
+            </div>
+            <div>
+              <label className="text-sm text-gray-400 mb-1 block">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition"
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={handleLogin}
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-xl font-semibold hover:from-blue-500 hover:to-blue-400 transition-all shadow-lg shadow-blue-500/25"
+          >
+            Sign In →
+          </button>
+
+          <p className="text-center text-gray-500 text-sm mt-4">
+            Don't have an account?{' '}
+            <span className="text-blue-400 cursor-pointer hover:text-blue-300">Sign Up</span>
+          </p>
+        </div>
       </div>
     </div>
   );

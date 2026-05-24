@@ -1,96 +1,61 @@
-import React from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 
+const activeOrders = [
+  { id: 'DEL-001', customer: 'Ahmed Al-Said', address: '123 Main St, Muscat', distance: '2.3 km', amount: 5.50, status: 'Pickup' },
+  { id: 'DEL-002', customer: 'Sara Mohammed', address: '456 Ocean Rd, Salalah', distance: '4.1 km', amount: 7.00, status: 'On the way' },
+];
+
 export default function DeliveryDashboard() {
+  const [isOnline, setIsOnline] = useState(true);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow sticky top-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-gray-900">Delivery Dashboard</h1>
-            <div className="flex items-center gap-4">
-              <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                🟢 Online
-              </button>
-              <div className="w-10 h-10 bg-green-600 rounded-full"></div>
+    <div className="min-h-screen bg-gray-950 text-white">
+      <nav className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between">
+        <div className="text-xl font-bold bg-gradient-to-r from-green-400 to-teal-400 bg-clip-text text-transparent">🚗 DeliveryHub</div>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-gray-400">{isOnline ? 'Online' : 'Offline'}</span>
+          <button onClick={() => setIsOnline(!isOnline)} className={`w-12 h-6 rounded-full transition-all ${isOnline ? 'bg-green-500' : 'bg-gray-700'} relative`}>
+            <span className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${isOnline ? 'left-7' : 'left-1'}`}/>
+          </button>
+        </div>
+      </nav>
+
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          {[['💰', '$48.50', "Today's Earnings"], ['📦', '6', 'Deliveries'], ['⭐', '4.9', 'Rating']].map(([icon, val, label]) => (
+            <div key={label} className="bg-gray-900 border border-gray-800 rounded-2xl p-4 text-center">
+              <span className="text-2xl">{icon}</span>
+              <p className="text-xl font-bold text-white mt-1">{val}</p>
+              <p className="text-gray-400 text-xs">{label}</p>
             </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-gray-500 text-sm font-medium">Today's Earnings</div>
-            <div className="mt-2 text-3xl font-bold text-green-600">$156.50</div>
-            <div className="mt-2 text-sm text-gray-600">12 deliveries completed</div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-gray-500 text-sm font-medium">Weekly Earnings</div>
-            <div className="mt-2 text-3xl font-bold text-green-600">$892.00</div>
-            <div className="mt-2 text-sm text-gray-600">72 deliveries</div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-gray-500 text-sm font-medium">Rating</div>
-            <div className="mt-2 text-3xl font-bold text-yellow-500">4.9★</div>
-            <div className="mt-2 text-sm text-gray-600">Based on 156 ratings</div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-gray-500 text-sm font-medium">Performance Score</div>
-            <div className="mt-2 text-3xl font-bold text-blue-600">98%</div>
-            <div className="mt-2 text-sm text-gray-600">On-time delivery rate</div>
-          </div>
+          ))}
         </div>
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Map Section */}
-          <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Live Map Tracking</h2>
-            <div className="h-96 bg-gray-100 rounded-lg border-2 border-gray-300 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-6xl mb-2">🗺️</div>
-                <p className="text-gray-600">Map integration will display here</p>
+        {/* Active Orders */}
+        <h2 className="text-lg font-bold mb-4">Active Orders</h2>
+        <div className="space-y-4">
+          {activeOrders.map(order => (
+            <div key={order.id} className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="font-bold text-white">{order.id}</span>
+                <span className={`px-3 py-1 rounded-full text-sm ${order.status === 'Pickup' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-blue-500/20 text-blue-400'}`}>{order.status}</span>
+              </div>
+              <p className="text-white font-medium">{order.customer}</p>
+              <p className="text-gray-400 text-sm mb-3">📍 {order.address}</p>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-400 text-sm">🗺️ {order.distance}</span>
+                <span className="text-green-400 font-bold">+${order.amount}</span>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <button className="flex-1 py-2.5 bg-green-600 hover:bg-green-500 rounded-xl font-medium transition">Accept</button>
+                <button className="flex-1 py-2.5 bg-gray-800 hover:bg-gray-700 rounded-xl font-medium transition text-gray-400">Decline</button>
               </div>
             </div>
-          </div>
-
-          {/* Active Orders */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Active Orders</h2>
-            <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="border-l-4 border-green-500 pl-4 py-2">
-                  <div className="font-semibold text-gray-900">Order #{2000 + i}</div>
-                  <div className="text-sm text-gray-600">📍 Pickup → Drop-off</div>
-                  <div className="text-sm font-medium text-green-600 mt-1">$25.00</div>
-                  <button className="mt-2 w-full px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700">
-                    View Details
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
-
-        {/* Action Buttons */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Link href="/delivery/available-orders" className="px-6 py-3 text-center bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-semibold">
-            📦 View Available Orders
-          </Link>
-          <Link href="/delivery/earnings" className="px-6 py-3 text-center bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold">
-            💰 View Earnings
-          </Link>
-          <Link href="/delivery/rating" className="px-6 py-3 text-center bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 font-semibold">
-            ⭐ View Rating
-          </Link>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }
